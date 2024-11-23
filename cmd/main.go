@@ -4,12 +4,8 @@ import (
 	"context"
 	"database/sql"
 	"flag"
-	"fmt"
 	"log"
-	"time"
 
-	"github.com/asp3cto/songshelf/internal/data/repository/sqlc"
-	"github.com/jackc/pgx/v5/pgtype"
 	"github.com/jackc/pgx/v5/pgxpool"
 	_ "github.com/lib/pq"
 	"github.com/pressly/goose"
@@ -47,37 +43,6 @@ func main() {
 	if err := migrate(pgConfig.DSN()); err != nil {
 		log.Fatal("migrate: ", err)
 	}
-
-	db := sqlc.New(conn)
-	data, err := db.GetVerses(ctx, sqlc.GetVersesParams{
-		SongID: 1,
-		Limit:  1,
-		Offset: 0,
-	})
-
-	err = db.DeleteSong(ctx, 2)
-	fmt.Println(err)
-
-	fmt.Println(data)
-
-	err = db.UpdateSong(ctx, sqlc.UpdateSongParams{
-		ID:       1,
-		Title:    "Supermassived Black Hole",
-		ArtistID: 1,
-		ReleaseDate: pgtype.Date{
-			Time:  time.Date(2006, 7, 16, 0, 0, 0, 0, time.UTC),
-			Valid: true,
-		},
-	})
-
-	fmt.Println(err)
-
-	id, err := db.InsertSong(ctx, sqlc.InsertSongParams{
-		Title: "Hit the Road, Jacffffk",
-		Name:  "Ray Chabgkjgrles",
-	})
-
-	fmt.Println(id, err)
 }
 
 func migrate(url string) error {

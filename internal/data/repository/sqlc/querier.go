@@ -11,7 +11,6 @@ import (
 type Querier interface {
 	DeleteSong(ctx context.Context, id int) error
 	GetVerses(ctx context.Context, arg GetVersesParams) ([]GetVersesRow, error)
-	// Select the artist ID, either from the insert or existing
 	InsertSong(ctx context.Context, arg InsertSongParams) (int, error)
 	UpdateSong(ctx context.Context, arg UpdateSongParams) error
 }
