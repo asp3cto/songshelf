@@ -9,41 +9,39 @@ import (
 	"context"
 )
 
-const getVersesBySongName = `-- name: GetVersesBySongName :many
+const getVerses = `-- name: GetVerses :many
 SELECT
-    v.verse_number,
-    v.text
+    verse_number,
+    text
 FROM
-    verses v
-        JOIN
-    songs s ON v.song_id = s.id
+    verses
 WHERE
-    s.title = $1
+    song_id = $1
 ORDER BY
-    v.verse_number
+    verse_number
 LIMIT $2 OFFSET $3
 `
 
-type GetVersesBySongNameParams struct {
-	Title  string `json:"title"`
-	Limit  int32  `json:"limit"`
-	Offset int32  `json:"offset"`
+type GetVersesParams struct {
+	SongID int   `json:"song_id"`
+	Limit  int32 `json:"limit"`
+	Offset int32 `json:"offset"`
 }
 
-type GetVersesBySongNameRow struct {
+type GetVersesRow struct {
 	VerseNumber int    `json:"verse_number"`
 	Text        string `json:"text"`
 }
 
-func (q *Queries) GetVersesBySongName(ctx context.Context, arg GetVersesBySongNameParams) ([]GetVersesBySongNameRow, error) {
-	rows, err := q.db.Query(ctx, getVersesBySongName, arg.Title, arg.Limit, arg.Offset)
+func (q *Queries) GetVerses(ctx context.Context, arg GetVersesParams) ([]GetVersesRow, error) {
+	rows, err := q.db.Query(ctx, getVerses, arg.SongID, arg.Limit, arg.Offset)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	var items []GetVersesBySongNameRow
+	var items []GetVersesRow
 	for rows.Next() {
-		var i GetVersesBySongNameRow
+		var i GetVersesRow
 		if err := rows.Scan(&i.VerseNumber, &i.Text); err != nil {
 			return nil, err
 		}

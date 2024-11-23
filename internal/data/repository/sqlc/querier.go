@@ -9,7 +9,8 @@ import (
 )
 
 type Querier interface {
-	GetVersesBySongName(ctx context.Context, arg GetVersesBySongNameParams) ([]GetVersesBySongNameRow, error)
+	DeleteSong(ctx context.Context, id int) error
+	GetVerses(ctx context.Context, arg GetVersesParams) ([]GetVersesRow, error)
 }
 
 var _ Querier = (*Queries)(nil)

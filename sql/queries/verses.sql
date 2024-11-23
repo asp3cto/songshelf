@@ -1,13 +1,11 @@
--- name: GetVersesBySongName :many
+-- name: GetVerses :many
 SELECT
-    v.verse_number,
-    v.text
+    verse_number,
+    text
 FROM
-    verses v
-        JOIN
-    songs s ON v.song_id = s.id
+    verses
 WHERE
-    s.title = $1
+    song_id = $1
 ORDER BY
-    v.verse_number
+    verse_number
 LIMIT $2 OFFSET $3;

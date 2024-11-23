@@ -47,11 +47,14 @@ func main() {
 	}
 
 	db := sqlc.New(conn)
-	data, err := db.GetVersesBySongName(ctx, sqlc.GetVersesBySongNameParams{
-		Title:  "Hey Jude",
-		Limit:  10,
-		Offset: 1,
+	data, err := db.GetVerses(ctx, sqlc.GetVersesParams{
+		SongID: 1,
+		Limit:  1,
+		Offset: 0,
 	})
+
+	err = db.DeleteSong(ctx, 2)
+	fmt.Println(err)
 
 	fmt.Println(data)
 }
