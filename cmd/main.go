@@ -4,8 +4,10 @@ import (
 	"context"
 	"database/sql"
 	"flag"
+	"fmt"
 	"log"
 
+	"github.com/asp3cto/songshelf/internal/data/repository/sqlc"
 	"github.com/jackc/pgx/v5/pgxpool"
 	_ "github.com/lib/pq"
 	"github.com/pressly/goose"
@@ -44,6 +46,14 @@ func main() {
 		log.Fatal("migrate: ", err)
 	}
 
+	db := sqlc.New(conn)
+	data, err := db.GetVersesBySongName(ctx, sqlc.GetVersesBySongNameParams{
+		Title:  "Hey Jude",
+		Limit:  10,
+		Offset: 1,
+	})
+
+	fmt.Println(data)
 }
 
 func migrate(url string) error {

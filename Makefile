@@ -28,6 +28,6 @@ initdb:
 
 # Generate SQLC code
 sqlc:
-	rm -r internal/database
-	mkdir internal/database
+	rm -r internal/data/repository/sqlc
+	mkdir internal/data/repository/sqlc
 	sqlc generate
