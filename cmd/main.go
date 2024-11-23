@@ -71,6 +71,13 @@ func main() {
 	})
 
 	fmt.Println(err)
+
+	id, err := db.InsertSong(ctx, sqlc.InsertSongParams{
+		Title: "Hit the Road, Jacffffk",
+		Name:  "Ray Chabgkjgrles",
+	})
+
+	fmt.Println(id, err)
 }
 
 func migrate(url string) error {
