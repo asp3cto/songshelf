@@ -7,6 +7,8 @@ package sqlc
 
 import (
 	"context"
+
+	"github.com/jackc/pgx/v5/pgtype"
 )
 
 const deleteSong = `-- name: DeleteSong :exec
@@ -15,5 +17,32 @@ DELETE FROM songs WHERE id = $1
 
 func (q *Queries) DeleteSong(ctx context.Context, id int) error {
 	_, err := q.db.Exec(ctx, deleteSong, id)
+	return err
+}
+
+const updateSong = `-- name: UpdateSong :exec
+UPDATE songs
+SET
+    artist_id = $2,
+    title = $3,
+    release_date = $4
+WHERE
+    id = $1
+`
+
+type UpdateSongParams struct {
+	ID          int         `json:"id"`
+	ArtistID    int         `json:"artist_id"`
+	Title       string      `json:"title"`
+	ReleaseDate pgtype.Date `json:"release_date"`
+}
+
+func (q *Queries) UpdateSong(ctx context.Context, arg UpdateSongParams) error {
+	_, err := q.db.Exec(ctx, updateSong,
+		arg.ID,
+		arg.ArtistID,
+		arg.Title,
+		arg.ReleaseDate,
+	)
 	return err
 }

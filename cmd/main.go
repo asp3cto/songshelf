@@ -6,8 +6,10 @@ import (
 	"flag"
 	"fmt"
 	"log"
+	"time"
 
 	"github.com/asp3cto/songshelf/internal/data/repository/sqlc"
+	"github.com/jackc/pgx/v5/pgtype"
 	"github.com/jackc/pgx/v5/pgxpool"
 	_ "github.com/lib/pq"
 	"github.com/pressly/goose"
@@ -57,6 +59,18 @@ func main() {
 	fmt.Println(err)
 
 	fmt.Println(data)
+
+	err = db.UpdateSong(ctx, sqlc.UpdateSongParams{
+		ID:       1,
+		Title:    "Supermassived Black Hole",
+		ArtistID: 1,
+		ReleaseDate: pgtype.Date{
+			Time:  time.Date(2006, 7, 16, 0, 0, 0, 0, time.UTC),
+			Valid: true,
+		},
+	})
+
+	fmt.Println(err)
 }
 
 func migrate(url string) error {
